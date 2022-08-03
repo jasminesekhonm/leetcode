@@ -1,18 +1,26 @@
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
-        # start with assuming sequence = longest increasing subsequence
-        # if it is not 
-        # start with picking (len(sequence) - 1) elements 
         
-        # [10, 9, 2, 5, 3, 7, 101, 18]
+        sub = [nums[0]]
         
-        dp = [1] * len(nums)
-        for i in range(len(nums)):
-            for j in range(i):
-                if nums[i] > nums[j]:
-                    dp[i] = max(dp[i], dp[j] + 1)
+        for num in nums[1:]:
+            if num > sub[-1]:
+                sub.append(num)
+            else:
+                i = 0
+                while num > sub[i]:
+                    i += 1
                     
-        return max(dp)
+                sub[i] = num 
+        
+        return len(sub)
+                
                 
             
+        
+        
+        
+        
+        
+        
         
