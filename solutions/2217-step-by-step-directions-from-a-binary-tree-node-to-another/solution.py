@@ -20,39 +20,60 @@ class Solution:
         # 4. find lowest common ancestor
         # 5. startNode -> LCA -> destNode
         
-        graph = collections.defaultdict(list)
-        queue = collections.deque([root])
+        graph = defaultdict(set)
         
-        while queue:
-            node = queue.popleft()
+        def recurse(node):
+            
+            if not node:
+                return None
+            
+            if node.val == startValue:
+                self.startNode = node 
+                
+            if node.val == destValue:
+                self.destNode = node 
+                
             if node.left:
-                graph[node.left.val].append((node.val, 'U'))
-                graph[node.val].append((node.left.val, 'L'))
-                
-                queue.append(node.left)
-                
+                graph[node].add((node.left, 'L'))
+                graph[node.left].add((node, 'U'))
+                recurse(node.left)
+            
             if node.right:
-                graph[node.right.val].append((node.val, 'U'))
-                graph[node.val].append((node.right.val, 'R'))
-                
-                queue.append(node.right)
+                graph[node].add((node.right, 'R'))
+                graph[node.right].add((node, 'U'))
+                recurse(node.right)
                 
         
-        queue = collections.deque()
-        queue.append((startValue, ""))
+        recurse(root)
+        
+        q = collections.deque()
+        q.append((self.startNode, ""))
         
         visited = set()
         
-        while True:
-            val, path = queue.popleft()
-            if val == destValue:
-                return path 
-            visited.add(val)
-            for neighbor in graph[val]:
-                if neighbor[0] in visited:
-                    continue 
-                queue.append((neighbor[0], path + neighbor[1]))
-                
-        return path
+        while q:
+            curr_node, curr_direction = q.popleft() 
+            if curr_node == self.destNode:
+                return curr_direction
+            
+            visited.add(curr_node)
+            
+            
+            for neighbor in graph[curr_node]:
+                if neighbor[0] not in visited:
+                    q.append((neighbor[0], curr_direction + neighbor[1]))
+                    
+        return -1 
             
         
+        
+        
+                
+
+            
+                
+        
+        
+            
+                
+                
