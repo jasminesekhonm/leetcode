@@ -9,7 +9,6 @@ class Solution:
         i = 1
         node1, node2 = head, head
         while node2 is not None and node1 is not None:
-            
             if i % 2 == 0:
                 node1 = node1.next 
             node2 = node2.next 
