@@ -7,17 +7,18 @@
 class Solution:
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
         
-        max_sum = float('-inf')
-        def max_gain(node):
-            nonlocal max_sum
+        def maxGain(node):
             if node is None:
-                return 0 
-            
-            left_gain = max(max_gain(node.left), 0)
-            right_gain = max(max_gain(node.right), 0)
-            price_newpath = node.val + left_gain + right_gain 
-            max_sum = max(price_newpath, max_sum)
-            return node.val + max(left_gain, right_gain)
+                return 0
+            nonlocal max_sum 
+            right_gain = max(maxGain(node.right), 0)
+            left_gain = max(maxGain(node.left), 0)
+            price_newpath = node.val + left_gain + right_gain
+            max_sum = max(max_sum, price_newpath)
+            return node.val + max(right_gain, left_gain)
         
-        max_gain(root)
+        max_sum = -float('inf')
+        maxGain(root)
         return max_sum
+            
+        
