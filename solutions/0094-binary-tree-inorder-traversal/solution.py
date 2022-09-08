@@ -6,17 +6,16 @@
 #         self.right = right
 class Solution:
     def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
-        result = []
-        def recur(node):
-            if not node:
-                return None
-            recur(node.left)
-            result.append(node.val)
-            recur(node.right)
-            
-        recur(root)
-        return result
+        output = []
+        def traverse(node):
+            if node is None:
+                return 
+            if node.left is not None:
+                traverse(node.left)
+            output.append(node.val)
+            if node.right is not None:
+                traverse(node.right)
         
+        traverse(root)
+        return output
         
-# O(n) --> Time complexity
-# space complexity -> 
