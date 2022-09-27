@@ -1,19 +1,17 @@
 class Solution:
     def generate(self, numRows: int) -> List[List[int]]:
-        
-        if numRows == 1:
+        if numRows == 0:
+            return []
+        elif numRows == 1:
             return [[1]]
         
-        output = [[1], [1, 1]]
-        if numRows == 2:
-            return output
+        pascalTr = [[1], [1, 1]]
         
-        for i in range(3, numRows+1):
-            output_ = [1 for _ in range(i)]
-            # n -> n, n -1
-            for j in range(len(output_)):
-                if j != 0 and j != (len(output_) - 1):
-                    output_[j] = output[-1][j] + output[-1][j-1]
-            output.append(output_)
-        return output
-        
+        for n in range(2,numRows):
+            currRow = [1] * (n+1)
+            for i in range(1,n):
+                currRow[i] = pascalTr[n-1][i-1] + pascalTr[n-1][i]
+                
+            pascalTr.append(currRow)
+            
+        return pascalTr
