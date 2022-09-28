@@ -3,22 +3,13 @@ class Solution:
         
         m, n = len(grid), len(grid[0])
         
-        dp = [[0 for _ in range(n)] for _ in range(m)]
+        for i in range(1, m):
+            grid[i][0] += grid[i - 1][0]
+        for j in range(1, n):
+            grid[0][j] += grid[0][j - 1]
+            
+        for i in range(1, m):
+            for j in range(1, n):
+                grid[i][j] += min(grid[i - 1][j], grid[i][j-1])
         
-        dp[0][0] = grid[0][0]
-        print(dp)
-        for i in range(m):
-            for j in range(n):
-                if (i == 0 and j != 0):# first row
-                    print('went here!')
-                    dp[i][j] = grid[i][j] + dp[i][j-1]
-                elif (j == 0 and i != 0):
-                    print('went here!!')
-                    dp[i][j] = grid[i][j] + dp[i-1][j]
-                elif (i != 0 and j !=0 ):
-                    print('went here !!!')
-                    dp[i][j] = min(dp[i-1][j] + grid[i][j], dp[i][j-1] + grid[i][j])
-        print(dp)
-        return dp[-1][-1]
-                    
-        
+        return grid[m-1][n-1]
