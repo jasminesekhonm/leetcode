@@ -1,5 +1,15 @@
 class Solution:
     def findDuplicate(self, nums: List[int]) -> int:
-        freqDict = Counter(nums)
-        return [k for k in freqDict if freqDict[k] > 1][0]
+        
+        n = len(nums) 
+        maxNum = n - 1
+        
+        visited = set()
+        
+        for num in nums:
+            if num not in visited:
+                visited.add(num)
+            else:
+                return num
+            
         
