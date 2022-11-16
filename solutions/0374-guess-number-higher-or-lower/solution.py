@@ -7,17 +7,15 @@
 
 class Solution:
     def guessNumber(self, n: int) -> int:
-        left = 0
+        left = 1
         right = n
         while left <= right:
             mid = (left + right) // 2
-            #print(mid)
-            myguess = guess(mid)
-            if myguess == 0:
-                return mid
-            elif myguess == 1:
+            currGuess = guess(mid)
+            if currGuess == 0:
+                return mid 
+            elif currGuess == -1:
+                right = mid - 1 
+            else:
                 left = mid + 1
-            elif myguess == -1:
-                right = mid - 1
-        
         
