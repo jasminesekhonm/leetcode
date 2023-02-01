@@ -1,18 +1,14 @@
 class Solution:
     def longestValidParentheses(self, s: str) -> int:
-        lenLongest = 0
-        stack = [-1]
-        currLen = 0
-        for i, val in enumerate(s):
-            if val == '(':
-                stack.append(i)
+        max_length = 0
+        stck=[-1] # initialize with a start index
+        for i in range(len(s)):
+            if s[i] == '(':
+                stck.append(i)
             else:
-                stack.pop()
-                if len(stack) == 0:
-                    stack.append(i)
+                stck.pop()
+                if not stck: # if popped -1, add a new start index
+                    stck.append(i)
                 else:
-                    lenLongest = max(lenLongest, i - stack[-1])
-                   
-        return lenLongest
-                    
-        
+                    max_length=max(max_length, i-stck[-1]) # update the length of the valid substring
+        return max_length
