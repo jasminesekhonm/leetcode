@@ -1,14 +1,27 @@
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        
-        subsets = []
         candidates.sort()
         
-        for idx, candidate in enumerate(candidates):
-            left = target - candidate
-            if left == 0:
-                subsets.append([candidate])
-            elif left > 0:
-                for subset in self.combinationSum(candidates[idx:], left):
-                    subsets.append([candidate] + subset)
-        return subsets
+
+        q = deque()
+        
+        for candidate in candidates:
+            q.append(([candidate], candidate))
+
+        res = []
+        
+        while q:
+            
+            currComb, currSum = q.pop()
+            if currSum == target and sorted(currComb) not in res:
+                res.append(sorted(currComb))
+
+            for candidate in candidates:
+                if (currSum + candidate) <= target and candidate >= currComb[-1]:
+                    q.append((currComb + [candidate], currSum + candidate))
+
+        return res 
+
+        
+        
+
