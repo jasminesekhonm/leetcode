@@ -4,24 +4,26 @@ class Solution:
         Do not return anything, modify matrix in-place instead.
         """
         
-        rows, cols = len(matrix), len(matrix[0])
+        m, n = len(matrix), len(matrix[0])
         
-        visited = set()
+        def convert_row(rowNum):
+            for col in range(n):
+                if matrix[rowNum][col] != 0:
+                    matrix[rowNum][col] = 'change'
         
-        def modifyElems(row, col):
-            for j in range(cols):
-                if (row, j) not in visited and matrix[row][j] != 0:
-                    visited.add((row, j))
-                
-            for i in range(rows):
-                if (i, col) not in visited and matrix[i][col] != 0:
-                    visited.add((i, col))
-        
-        for row in range(rows):
-            for col in range(cols):
+        def convert_col(colNum):
+            for row in range(m):
+                if matrix[row][colNum] != 0:
+                    matrix[row][colNum] = 'change'
+
+        for row in range(m):
+            for col in range(n):
                 if matrix[row][col] == 0:
-                    modifyElems(row, col)
+                    convert_row(row)
+                    convert_col(col)
+
+        for row in range(m):
+            for col in range(n):
+                if matrix[row][col] == 'change':
+                    matrix[row][col] = 0 
                     
-        
-        for (row, col) in visited:
-            matrix[row][col] = 0
