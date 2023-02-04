@@ -7,20 +7,24 @@
 class Solution:
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
         
-        depthDict = defaultdict(list)
-        
-        def getDepth(node, currDepth):
-            if node is None:
-                return 
-            depthDict[currDepth].append(node.val)
-            if node.left:
-                getDepth(node.left, currDepth+1)
-            if node.right:
-                getDepth(node.right, currDepth+1)
-                
-        getDepth(root, 0)
-        
-        return depthDict.values()
-        
+        res = {}
+
+        def traverse(node, currLevel):
             
+            if node is not None:
+                if currLevel not in res:
+                    res[currLevel] = []
+                res[currLevel].append(node.val)
+                traverse(node.left, currLevel + 1)
+                traverse(node.right, currLevel + 1)
+
         
+        traverse(root, 0)
+        if len(res) == 0:
+            return []
+
+        op = sorted(res.items(), key = lambda x: x[0])
+        op = [r[1] for r in op]
+        return op 
+        
+
