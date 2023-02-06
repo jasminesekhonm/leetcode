@@ -1,28 +1,26 @@
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
-        # [3,2,1,0,4]
-        
-        # 4: GOOD
-        # 0: BAD 
-        # 1: BAD
-        # 2: BAD
-        # 3: BAD
-        
-        # [2,3,1,1,4]
-        # 4: GOOD
-        # 1: GOOD
-        # 1: GOOD
-        # 3: GOOD
-        # 2: GOOD 
-        
+
         dp = [False for _ in range(len(nums))]
+
+        dp[-1] = True 
+
+        for i in range(len(nums)-2,-1,-1):
+            print(i)
+            maxJump = nums[i]
+            j = min(i+maxJump, len(nums)-1)
+            print(j)
+            while j > i and not dp[j]:
+                j -= 1 
+            dp[i] = True if dp[j] else False 
+
         
-        for i in range(len(nums)):
-            idx = len(nums) - i - 1
-            if (idx + nums[idx] >= len(nums)-1) or True in dp[idx:idx+nums[idx]+1]:
-                dp[idx] = True
+                
+            
+
+
+
+
         return dp[0]
-        
-        
-        
-        
+            
+
