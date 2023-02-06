@@ -5,12 +5,12 @@
 #         self.next = next
 class Solution:
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
-        
-        values = []
-        node = head
+
+        listVals = []
+
+        node = head 
         while node:
-            values.append(node.val)
+            listVals.append(node.val)
             node = node.next 
-        print(values)
-        return values == values[::-1]
         
+        return listVals == listVals[::-1]
