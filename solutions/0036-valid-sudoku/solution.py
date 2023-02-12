@@ -1,33 +1,33 @@
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
-        
-        rowDict = defaultdict(list)
-        colDict = defaultdict(list)
-        boxDict = defaultdict(list)
-        m, n = len(board), len(board[0])
-        for i in range(m):
-            for j in range(n):
-                rowDict[i] = []
-                colDict[j] = []
-                boxDict[(i//3, j // 3)] = []
+        N = 9
+
+        rows = [0] * N 
+        cols = [0] * N 
+        boxes = [0] * N 
+
+        for i in range(N):
+            for j in range(N):
+                if board[i][j] == '.':
+                    continue 
                 
-        
-        
-        for i in range(m):
-            for j in range(n):
-                elem = board[i][j]
+                pos = int(board[i][j]) - 1 
+
+                if rows[i] & (1 << pos):
+                    return False 
+                rows[i] |= (1 << pos)
+
+                if cols[j] & (1 << pos):
+                    return False 
+                cols[j] |= (1 << pos)
+
+                bid = (i // 3) * 3 + (j // 3)
+                if boxes[bid] & (1 << pos):
+                    return False 
+                boxes[bid] |= (1 << pos)
+
+        return True 
+
                 
-                if elem.isdigit(): 
-                    elem = int(elem)
-                
-                    if not (0 < elem < 10) or (elem in rowDict[i]) or (elem in colDict[j]) or (elem in boxDict[(i//3, j//3)]):
-                        return False 
-               
-                    rowDict[i].append(elem)
-                    colDict[j].append(elem)
-                    boxDict[(i//3, j//3)].append(elem)
-        return True
-                    
-                
-        
+
         
