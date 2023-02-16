@@ -1,16 +1,16 @@
 class Solution:
     def uniquePaths(self, m: int, n: int) -> int:
-        # number of ways robot can reach finish is 2
-        # number of ways robot can reach left is 2 
-        # number of ways robot can reach right is 2 
-        # number of ways robot can reach corner is 1
-        # number of ways robot can reach 
+        dp = [[0 for _ in range(n)] for _  in range(m)]
+
+        dp[0][0] = 1
         
-        d = [[1] * n for _ in range(m)]
-        
-        for col in range(1, m):
-            for row in range(1, n):
-                d[col][row] = d[col][row - 1] + d[col - 1][row]
-        return d[m-1][n-1]
+        for i in range(m):
+            for j in range(n):
+
+                if 0 <= (i-1) < m and 0 <= j < n:
+                    dp[i][j] += dp[i-1][j]
                 
-       
+                if 0 <= i < m and 0 <= (j-1) < n:
+                    dp[i][j] += dp[i][j-1]
+
+        return dp[-1][-1]
