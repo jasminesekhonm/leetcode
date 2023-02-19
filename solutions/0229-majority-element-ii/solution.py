@@ -1,6 +1,8 @@
 class Solution:
     def majorityElement(self, nums: List[int]) -> List[int]:
-        freqDict = Counter(nums)
-        n = len(nums)
-        return [k for k in freqDict if freqDict[k] > (n / 3)]
+        freqDict = defaultdict(int)
         
+        for num in nums: 
+            freqDict[num] = freqDict.get(num, 0) + 1
+
+        return [k for (k, v) in freqDict.items() if v > (len(nums)//3)]
