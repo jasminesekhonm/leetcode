@@ -1,26 +1,24 @@
 class Solution:
     def floodFill(self, image: List[List[int]], sr: int, sc: int, color: int) -> List[List[int]]:
-        moves = [(1, 0), (0, 1), (-1, 0), (0, -1)]
-        
+
         m, n = len(image), len(image[0])
-        
-        q = deque()
-        q.append((sr, sc, image[sr][sc]))
-        
+
+        moves = [(1,0),(0,1),(0,-1),(-1,0)]
+
+        q = [(sr, sc)]
+
         visited = set()
-        
+
+        src_color = image[sr][sc]
         while q:
-            currRow, currCol, currColor = q.pop()
-            visited.add((currRow, currCol))
+            row, col = q.pop()
+            visited.add((row, col))
+            image[row][col] = color 
             for (dRow, dCol) in moves:
-                newRow, newCol  = currRow + dRow, currCol + dCol
-                if 0 <= newRow < m and 0 <= newCol < n and image[newRow][newCol] == currColor and not (newRow, newCol) in visited:
-                    q.append((newRow, newCol, currColor))
+                newRow, newCol = row + dRow, col + dCol 
+                if 0 <= newRow < m and 0 <= newCol < n and image[newRow][newCol] == src_color and (newRow, newCol) not in visited:
+                    q.append((newRow, newCol)) 
                     
-        for (row, col) in visited:
-            image[row][col] = color
-            
-        return image
-        
-        
-        
+
+        return image 
+
