@@ -3,9 +3,9 @@ class Solution:
         """
         Do not return anything, modify nums1 in-place instead.
         """
-        
-        for j, num in enumerate(nums2):
-            nums1[m + j] = num
+        if n > 0:
             
-        return nums1.sort()
-            
+            nums1[-n:] = nums2 
+            nums1.sort()
+
+
