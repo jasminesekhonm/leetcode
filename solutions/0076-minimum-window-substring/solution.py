@@ -1,46 +1,40 @@
+from collections import Counter
+
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
-
-        if not s or not t:
-            return "" 
-
-        def isequal(currentDict, tDict):
-            for k, v in tDict.items():
-                if k not in currentDict or currentDict[k] < tDict[k]:
-                    return False 
-            return True 
-
-        tDict = Counter(t)
-        l, r = 0, 0 
-        ans = [float('inf'), None, None]
-
-        currentDict = defaultdict(int)
-        formed = 0 
-
-        maxWindow = float('inf')
-        currWindow = 0 
-
-        while l <= r and r < len(s):
-            newChar = s[r]
-            currentDict[newChar] = currentDict.get(newChar, 0) + 1
-            
-            while isequal(currentDict, tDict) and l <= r:
-                currWindow = r - l + 1 
-                maxWindow = min(currWindow, maxWindow)
-                if maxWindow == currWindow:
-                    ans = [maxWindow, l, r]
-                lastChar = s[l]
-                currentDict[lastChar] -= 1 
-                l += 1 
-            
-            
-
-            r += 1 
         
-        return s[ans[1]:ans[2]+1] if ans[1] is not None else ""
+        answer_key = Counter(t)
+        window = {}
+        
+        valid_keys_required = len(answer_key)
+        valid_keys_formed = 0
 
+        output = float('inf'), 0, 0 
+        l, r = 0, 0
 
+        # Keep expanding the window until we find a valid substring
+        while r < len(s):
+            char = s[r] 
+            window[char] = window.get(char, 0) + 1 
+
+            if char in answer_key and window[char] == answer_key[char]:
+                valid_keys_formed += 1
+
+            while l <= r and valid_keys_formed == valid_keys_required:
+                prev_char = s[l]
+
+                # Make sure to update the value of output before incrementing "l"
+                if output[0] > (r-l+1):
+                    output = (r-l+1), l, r
                 
+                window[prev_char] -= 1
 
+                if prev_char in answer_key and window[prev_char] < answer_key[prev_char]:
+                    valid_keys_formed -= 1
+                
+                l += 1
             
+            r += 1
         
+        
+        return "" if output[0] == float('inf') else s[output[1]:output[2]+1]
