@@ -1,9 +1,9 @@
 class Solution:
     def rangeBitwiseAnd(self, left: int, right: int) -> int:
-        
-        shift = 0 
-        while left < right: 
-            left = left >> 1
-            right = right >> 1 
-            shift += 1 
-        return left << shift 
+        cnt = 0
+        while left != right:
+            left >>= 1
+            right >>= 1
+            cnt += 1
+        return left << cnt
+
