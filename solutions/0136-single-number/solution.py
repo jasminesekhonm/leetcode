@@ -1,9 +1,16 @@
+from collections import defaultdict 
+
 class Solution:
     def singleNumber(self, nums: List[int]) -> int:
-        freqCount = defaultdict(int)
+        
+        numDict = defaultdict(int)
         for num in nums:
-            freqCount[num] = freqCount.get(num, 0) + 1
+            numDict[num] += 1
         
-        return [num for num in freqCount if freqCount[num] == 1][0]
-            
+        for num in numDict:
+            if numDict[num] == 1:
+                return num
+
         
+
+
