@@ -3,19 +3,20 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
-
-        # [2, 0, 2, 1, 1, 0]
-
-        n = len(nums)
         
-        swap = True 
+        p0 = curr = 0
+        p2 = len(nums)-1
 
-        while swap:
-            swap = False 
+        while curr <= p2:
+            if nums[curr] == 0:
+                nums[p0], nums[curr] = nums[curr], nums[p0]
+                p0 += 1
+                curr += 1
+            elif nums[curr] == 2:
+                nums[curr], nums[p2] = nums[p2], nums[curr]
+                p2 -= 1
 
-            for i in range(n-1):
-                if nums[i] > nums[i+1]:
-                    nums[i], nums[i+1] = nums[i+1], nums[i]
-                    swap = True
-
-            
+            else:
+                curr += 1
+        
+        
