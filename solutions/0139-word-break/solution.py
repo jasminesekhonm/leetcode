@@ -1,19 +1,21 @@
+import collections
+
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-        word_set = set(wordDict)
-        q = collections.deque()
-        visited = set()
         
-        q.append(0)
-        
-        while q:
-            start = q.popleft()
-            if start in visited:
-                continue 
+        words = set(wordDict)
+        queue = collections.deque([0])
+        seen = set()
+
+        while queue:
+            start = queue.popleft()
+            if start == len(s):
+                return True 
             for end in range(start + 1, len(s) + 1):
-                if s[start:end] in word_set:
-                    q.append(end)
-                    if end == len(s):
-                        return True 
-            visited.add(start)
+                if end in seen:
+                    continue 
+                if s[start:end] in words:
+                    queue.append(end)
+                    seen.add(end)
+            
         return False
