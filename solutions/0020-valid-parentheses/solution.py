@@ -1,18 +1,21 @@
 class Solution:
     def isValid(self, s: str) -> bool:
-        paranthesesDict = {')': '(', 
-                            ']': '[', 
-                            '}': '{'}
-        
-        
+        bracketDict = {
+            "(": ")",
+            "[": "]",
+            "{": "}"
+        }
         stack = []
-        for char in s: 
-            if char in '({[':
+        for char in s:
+            if char in list(bracketDict.keys()):
                 stack.append(char)
-            elif char in ')}]':
-                if len(stack) == 0:
+            elif char in list(bracketDict.values()):
+                if len(stack) > 0:
+                    lastOpen = stack.pop()
+                    if not bracketDict[lastOpen] == char:
+                        return False
+                else:
                     return False 
-                last_open = stack.pop()
-                if last_open != paranthesesDict[char]:
-                    return False 
-        return True if len(stack) == 0 else False 
+        return (True if len(stack) == 0 else False)
+
+        
