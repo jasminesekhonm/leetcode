@@ -1,30 +1,17 @@
-"""
-# Definition for a Node.
-class Node:
-    def __init__(self, val=None, children=None):
-        self.val = val
-        self.children = children
-"""
-
 class Solution:
     def maxDepth(self, root: 'Node') -> int:
+        if not root:
+            return 0
+            
+        max_depth = 0
         
-        max_depth = 0 
-        
-        def currDepth(node, depth):
+        def dfs(node, current_depth):
             nonlocal max_depth
-            if node is None:
-                return  
+            max_depth = max(max_depth, current_depth)
             
-            max_depth = max(max_depth, depth)
-            
-            for child in node.children:
-                currDepth(child, depth+1)
-                
-        currDepth(root,1)
+            if node.children:
+                for child in node.children:
+                    dfs(child, current_depth + 1)
+        
+        dfs(root, 1)  # Depth of a tree with just the root is 1
         return max_depth
-                
-            
-        
-            
-        
