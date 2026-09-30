@@ -1,18 +1,23 @@
 class Solution:
-    def longestConsecutive(self, nums: List[int]) -> int:
+    def longestConsecutive(self, nums: list[int]) -> int:
         
+        # is it only integers, can they be negative, is it sorted 
+
+        # store the length of the consecutive element sequence starting at that element 
+     
+        bestLength = 0
         numSet = set(nums)
-        longestStreak = 0 
-
         for num in numSet:
-            if num-1 not in numSet:
-                currentNum = num 
-                currentLength = 1 
-        
-                while currentNum+1 in numSet:
-                    currentNum += 1 
-                    currentLength += 1
+            if (num-1) not in numSet:
+                 
+                maxLength = 1
+                while (num+1 in numSet):
+                    num += 1
+                    maxLength += 1
+                    
+                bestLength = max(maxLength, bestLength)
+            
+        return bestLength
 
-                longestStreak = max(currentLength, longestStreak)
+            
 
-        return longestStreak                 
