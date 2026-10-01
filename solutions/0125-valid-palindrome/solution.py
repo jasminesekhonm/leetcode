@@ -1,6 +1,20 @@
 class Solution:
     def isPalindrome(self, s: str) -> bool:
-        s = [a.lower() for a in s if a.isalnum()]
-        return s == s[::-1]
+        s = "".join([c.lower() for c in s if c.isalnum()])
+        if len(s) <= 1:
+            return True 
         
+        i = 0
+        j = len(s)-1
+
+        while i <= j:
+            if s[i] != s[j]:
+                return False
+            i += 1
+            j -= 1
+        
+        return True
+        
+
+            
         
