@@ -1,13 +1,8 @@
 class Solution:
-    def missingNumber(self, nums: List[int]) -> int:
-        # idx: 0, 1, 2, 3 
-        # num: 4, 3, 2, 1 
+    def missingNumber(self, nums: list[int]) -> int:
+        i = 0 
 
-        # in this case 0 is missing 
-
-        missing = len(nums)
-        for i, num in enumerate(nums):
-            missing ^= i ^ num 
-        
-        return missing 
+        while i in set(nums):
+            i += 1 
+        return i
         
