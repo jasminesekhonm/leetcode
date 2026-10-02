@@ -1,30 +1,30 @@
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
-        moves = [(1, 0), (0, 1), (0, -1), (-1, 0)]
         m, n = len(grid), len(grid[0])
-        visited = set()
+        moves = [(1, 0), (0, -1), (-1, 0), (0, 1)]
 
         def dfs(i, j):
-            nonlocal visited 
 
             q = [(i, j)]
-
+            
             while q:
-                currRow, currCol = q.pop()
-                visited.add((currRow, currCol))
-                for move in moves:
-                    nextRow, nextCol = currRow + move[0], currCol + move[1]
-                    if 0 <= nextRow < m and 0 <= nextCol < n and grid[nextRow][nextCol] == "1" and (nextRow, nextCol) not in visited:
-                        q.append((nextRow, nextCol))
-            return 1 
+                curr_row, curr_col = q.pop()
+                grid[curr_row][curr_col] = "0"
 
-        numIslands = 0
+                for move in moves:
+                    new_row, new_col = curr_row + move[0], curr_col + move[1]
+                    if 0 <= new_row < m and 0 <= new_col < n and grid[new_row][new_col] == "1":
+                        q.append((new_row, new_col))
+                        
+
+
+
+        num_islands = 0
         for i in range(m):
             for j in range(n):
-                if grid[i][j] == "1" and (i, j) not in visited:
-                    numIslands += dfs(i, j)
+                if grid[i][j] == "1":
+                    dfs(i, j)
+                    num_islands += 1 
 
-        return numIslands
-                    
-            
-        
+        return num_islands
+
