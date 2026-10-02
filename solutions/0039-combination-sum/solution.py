@@ -1,27 +1,20 @@
 class Solution:
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
+        combinations = []
         candidates.sort()
+        candidates = [c for c in candidates if c <= target]
+        if len(candidates) == 0:
+            return []
         
-
-        q = deque()
+        def helper(candidates, target, combination):
+            if target == 0:
+                combinations.append(combination)
+                return 
+            for i, candidate in enumerate(candidates):
+                if candidate > target:
+                    continue 
+                helper(candidates[i:], target-candidate, combination + [candidate])
         
-        for candidate in candidates:
-            q.append(([candidate], candidate))
-
-        res = []
+        helper(candidates, target, [])
+        return combinations 
         
-        while q:
-            
-            currComb, currSum = q.pop()
-            if currSum == target and sorted(currComb) not in res:
-                res.append(sorted(currComb))
-
-            for candidate in candidates:
-                if (currSum + candidate) <= target and candidate >= currComb[-1]:
-                    q.append((currComb + [candidate], currSum + candidate))
-
-        return res 
-
-        
-        
-
