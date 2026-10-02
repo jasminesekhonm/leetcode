@@ -5,26 +5,26 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
-        
-        res = {}
+    def levelOrder(self, root: TreeNode | None) -> list[list[int]]:
 
-        def traverse(node, currLevel):
-            
-            if node is not None:
-                if currLevel not in res:
-                    res[currLevel] = []
-                res[currLevel].append(node.val)
-                traverse(node.left, currLevel + 1)
-                traverse(node.right, currLevel + 1)
-
-        
-        traverse(root, 0)
-        if len(res) == 0:
+        if root is None:
             return []
 
-        op = sorted(res.items(), key = lambda x: x[0])
-        op = [r[1] for r in op]
-        return op 
-        
+        q = deque([root])
 
+        res = []
+        while q:
+            level = []
+            for _ in range(len(q)):
+                node = q.popleft()
+                level.append(node.val)
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+            res.append(level)
+        
+        return res
+
+
+        
