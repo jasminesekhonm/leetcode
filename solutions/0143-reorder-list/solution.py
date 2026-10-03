@@ -1,36 +1,46 @@
 # Definition for singly-linked list.
-# class ListNode(object):
+# class ListNode:
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
-class Solution(object):
-    def reorderList(self, head):
+class Solution:
+    def reorderList(self, head: ListNode | None) -> None:
         """
-        :type head: ListNode
-        :rtype: None Do not return anything, modify head in-place instead.
+        Do not return anything, modify head in-place instead.
         """
-        firstHalf, secondHalf = head, head.next
-        while secondHalf and secondHalf.next:
-            firstHalf = firstHalf.next
-            secondHalf = secondHalf.next.next
+        
+        if not head or not head.next:
+            return 
 
-    
-        prev, curr = None, firstHalf.next
-        firstHalf.next = None
-        while (curr):
-            temp = curr.next
-            curr.next = prev
-            prev = curr
-            curr = temp
+        slow, fast = head, head
 
-        list1 = head 
-        list2 = prev
-        while list2:
-            list1next = list1.next  
-            list2next = list2.next  
-            
-            list1.next = list2  
-            list2.next = list1next  
-            
-            list1 = list1next  
-            list2 = list2next  
+        while fast.next and fast.next.next:
+            slow = slow.next 
+            fast = fast.next.next 
+
+        
+        # reached halfway
+
+        curr = slow.next 
+        slow.next = None 
+
+        prev = None 
+
+        while curr:
+            tmp = curr.next
+            curr.next = prev 
+            prev = curr 
+            curr = tmp
+
+        
+        head1, head2 = head, prev 
+
+        while head2:
+            next1, next2 = head1.next, head2.next 
+
+            head1.next = head2 
+            head2.next = next1
+
+            head1, head2 = next1, next2 
+
+     
