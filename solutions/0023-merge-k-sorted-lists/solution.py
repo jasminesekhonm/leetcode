@@ -1,21 +1,44 @@
-class Solution(object):
-    def mergeKLists(self, lists):
-        stack = []
-        for l in lists:
-            node = l
-            while node:
-                stack.append(node.val)
-                node = node.next 
-                
-        stack = sorted(stack)
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+import heapq 
+
+class Solution:
+    def mergeKLists(self, lists: list[ListNode | None]) -> ListNode | None:
         
-        dummyHead = ListNode(val=0, next=None)
+        dummy = ListNode(0, None)
+
+        heap = [(node.val, i, node) for i, node in enumerate(lists) if node]
+        heapq.heapify(heap)
         
-        node = dummyHead
+        tail = dummy
         
-        for other_node in stack:
-            next_node = ListNode(other_node, next=None)
-            node.next = next_node 
-            node = next_node 
-        return dummyHead.next 
+        while heap:
+            min_node_val, i, min_node = heapq.heappop(heap)
+            tail.next = ListNode(min_node_val, )
+            tail = tail.next 
+
+            if min_node.next:
+                heapq.heappush(heap, (min_node.next.val, i, min_node.next))
+        
+        return dummy.next
+
+        
+
+
+        
+    
+
             
+            
+
+
+
+
+
+
+
+        
