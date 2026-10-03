@@ -1,22 +1,28 @@
 class Solution:
     def maxPoints(self, points: list[list[int]]) -> int:
-        if len(points) <= 2:
-            return len(points)
-
-        def find_slope(point1, point2):
-            dx = point2[0] - point1[0]
-            dy = point2[1] - point1[1]
-
-            if dx == 0:
-                return inf
-            return dy / dx
         
-        ans = 1 
+        def get_slope(p1, p2):
+            x1, y1 = p1 
+            x2, y2 = p2 
+            if (x2 == x1):
+                return "V"
+            elif (y1 == y2):
+                return "H"
+            return (y2 - y1) / (x2 - x1)
 
-        for i, point1 in enumerate(points):
-            slopes = defaultdict(int)
-            for j, point2 in enumerate(points[i+1:]):
-                slope = find_slope(point1, point2)
-                slopes[slope] += 1
-                ans = max(slopes[slope], ans)
-        return ans+1
+
+        num_points = len(points)
+        
+        best = 1
+        for i in range(num_points):
+            p1 = points[i]
+            freq_dict = {}
+        
+            for j in range(i+1, num_points):
+                p2 = points[j]
+
+                slope = get_slope(p1, p2)
+                freq_dict[slope] = freq_dict.get(slope, 0) + 1 
+            if freq_dict:
+                best = max(best, max(freq_dict.values()) + 1)
+        return best
