@@ -5,19 +5,20 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def maxPathSum(self, root: Optional[TreeNode]) -> int:
-        max_sum = -float('inf')
-
-        def gain_from_subtree(node):
-            nonlocal max_sum 
-            if node is None: 
+    def maxPathSum(self, root: TreeNode | None) -> int:
+        self.max_sum = -float('inf')
+        def traverse_tree(node):
+            if not node:
                 return 0 
-            max_gain_from_left_subtree = max(gain_from_subtree(node.left), 0)
-            max_gain_from_right_subtree = max(gain_from_subtree(node.right), 0)
-            max_sum = max(max_sum, node.val + max_gain_from_left_subtree + max_gain_from_right_subtree)
-            return max(max_gain_from_left_subtree + node.val, max_gain_from_right_subtree + node.val)
-        
-        gain_from_subtree(root)
-        return max_sum
+            left = max(0, traverse_tree(node.left))
+            right = max(0, traverse_tree(node.right))
 
+            gain = node.val + left + right 
+            if gain > self.max_sum:
+                self.max_sum = gain 
 
+            return node.val + max(left, right)
+
+            
+        traverse_tree(root)
+        return self.max_sum
