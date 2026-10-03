@@ -1,22 +1,37 @@
 class Solution:
-    def threeSum(self, nums: List[int]) -> List[List[int]]:
-        res = []
+    def threeSum(self, nums: list[int]) -> list[list[int]]:
+        n = len(nums)
         nums.sort()
-        for i in range(len(nums)):
-            if nums[i] > 0:
-                break
-            if i == 0 or nums[i - 1] != nums[i]:
-                self.twoSum(nums, i, res)
-        return res
 
-    def twoSum(self, nums: List[int], i: int, res: List[List[int]]):
-        seen = set()
-        j = i + 1
-        while j < len(nums):
-            complement = -nums[i] - nums[j]
-            if complement in seen:
-                res.append([nums[i], nums[j], complement])
-                while j + 1 < len(nums) and nums[j] == nums[j + 1]:
-                    j += 1
-            seen.add(nums[j])
-            j += 1
+        combinations = set()
+
+        def twoSum(num, index, target):
+            complements = set()
+            two_sum_combinations = []
+            j = index 
+            while j < n:
+                candidate = nums[j]
+                complement = target - candidate 
+                if complement in complements:
+                    combinations.add((num, target-candidate, candidate  ))
+                    while j + 1 < n and nums[j+1] == nums[j]:
+                        j += 1 
+                complements.add(candidate)
+                j += 1
+            
+    
+
+
+        for i in range(n):
+            if i > 0 and nums[i] == nums[i-1]:
+                continue 
+            num = nums[i]
+            remaining = -num
+
+            twoSum(num, i+1, remaining)
+
+            
+
+        return list(combinations)
+
+        
