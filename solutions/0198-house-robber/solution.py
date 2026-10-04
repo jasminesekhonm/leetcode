@@ -1,24 +1,19 @@
 class Solution:
-    def rob(self, nums: List[int]) -> int:
+    def rob(self, nums: list[int]) -> int:
 
-        q = []
+        dp = [0 for _ in range(len(nums))]
 
-        maxSum = -float('inf')
+        if len(nums) <= 2:
+            return max(nums)
 
-        for i, num in enumerate(nums):
-            q.append([num, i])
+        dp[0] = nums[0]
+        dp[1] = nums[1]
 
-        visited = defaultdict(int) 
+        dp[2] = nums[2] + dp[0]
 
-        while q:
-            currNum, currIdx = q.pop()
-            maxSum = max(maxSum, currNum)
-            for i in range(currIdx+2, len(nums)):
-                if i not in visited or visited[i] < (currNum + nums[i]):
-                    q.append((currNum + nums[i], i))
-                    visited[i] = currNum + nums[i]
+        for i in range(3, len(nums)):
+            dp[i] = nums[i] + max(dp[i-2], dp[i-3])
 
-        return maxSum 
-
-
+        
+        return max(dp)
         
