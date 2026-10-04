@@ -1,9 +1,23 @@
 class Solution:
     def uniquePaths(self, m: int, n: int) -> int:
-        d = [[1] * n for _ in range(m)]
 
-        for col in range(1, m):
-            for row in range(1, n):
-                d[col][row] = d[col - 1][row] + d[col][row - 1]
+        dp = [[0 for _ in range(n)] for _ in range(m)]
 
-        return d[m - 1][n - 1]
+        for row in range(m):
+            dp[row][0] = 1 
+        
+        for col in range(n):
+            dp[0][col] = 1 
+
+        
+        for row in range(1, m):
+            for col in range(1, n):
+                dp[row][col] = dp[row-1][col] + dp[row][col-1]
+            
+
+
+
+
+
+        return dp[m-1][n-1]
+        
