@@ -1,40 +1,56 @@
-from collections import Counter
-
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
+
+        if len(s) < len(t):
+            return ""
         
-        answer_key = Counter(t)
-        window = {}
+        if len(s) == len(t) and s == t:
+            return s 
         
-        valid_keys_required = len(answer_key)
-        valid_keys_formed = 0
 
-        output = float('inf'), 0, 0 
-        l, r = 0, 0
+        t_dict = {}
 
-        # Keep expanding the window until we find a valid substring
-        while r < len(s):
-            char = s[r] 
-            window[char] = window.get(char, 0) + 1 
+        for char in t:
+            t_dict[char] = t_dict.get(char, 0) + 1
 
-            if char in answer_key and window[char] == answer_key[char]:
-                valid_keys_formed += 1
+        
+        i, j = 0, 0 
 
-            while l <= r and valid_keys_formed == valid_keys_required:
-                prev_char = s[l]
-
-                # Make sure to update the value of output before incrementing "l"
-                if output[0] > (r-l+1):
-                    output = (r-l+1), l, r
+        missing = len(t)
+        best_len = float('inf')
+        best_ix = (None, None)
+        while j < len(s) and missing > 0:
+            char = s[j]
+            if char in t_dict:
                 
-                window[prev_char] -= 1
+                if t_dict[char] > 0:
+                    missing -= 1 
+                t_dict[char] -= 1
+            j += 1 
 
-                if prev_char in answer_key and window[prev_char] < answer_key[prev_char]:
-                    valid_keys_formed -= 1
-                
-                l += 1
+            while  missing == 0:
+                if (j - i) < best_len:
+                    best_len = j - i 
+                    best_ix = (i, j)
+                char = s[i]
+                if char in t_dict:
+                    t_dict[char] += 1
+                    if t_dict[char] > 0:
+                        missing += 1
+                i += 1
+
+        i, j = best_ix 
+        
+        return "" if i is None else s[i:j]
+
             
-            r += 1
+
+
+
+         
         
         
-        return "" if output[0] == float('inf') else s[output[1]:output[2]+1]
+
+
+        
+        
