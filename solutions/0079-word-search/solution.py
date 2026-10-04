@@ -1,35 +1,33 @@
 class Solution:
-    def exist(self, board: List[List[str]], word: str) -> bool:
-        firstChar = word[0]
+    def exist(self, board: list[list[str]], word: str) -> bool:
         m, n = len(board), len(board[0])
-        
-        freqDict = collections.Counter(word)
-        for i in range(m):
-            for j in range(n):
-                if board[i][j] in word:
-                    freqDict[board[i][j]] -= 1
-        if max(freqDict.values()) > 0:
-            return False
-        
-        moves = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-        
-        def dfs(i, j):
-            q = deque()
-            q.append((i, j, board[i][j], [(i, j)]))
-            while q:
-                currRow, currCol, currWord, currElems = q.pop()
-                if currWord == word:
-                    return True
-                for (dRow, dCol) in moves:
-                    nextRow, nextCol = currRow + dRow, currCol + dCol
-                    if 0 <= nextRow < m and 0 <= nextCol < n and ''.join((currWord, board[nextRow][nextCol])) in word and not (nextRow, nextCol) in currElems:
-                        q.append((nextRow, nextCol, ''.join((currWord, board[nextRow][nextCol])), currElems + [(nextRow, nextCol)]))
-            return False
-        
-        for i in range(m):
-            for j in range(n):
-                if board[i][j] == firstChar:
-                    if dfs(i, j):
+        wlen = len(word)
+        moves = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+        def build_word(r, c, k):
+            if board[r][c] != word[k-1]:
+                return False
+            if k == wlen:
+                return True 
+            saved = board[r][c]
+            board[r][c] = "#"
+            for (dr, dc) in moves:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < m and 0 <= nc < n and build_word(nr, nc, k+1):
                         return True
+            board[r][c] = saved 
+            return False
+
+
+        for i in range(m):
+            for j in range(n):
+                if build_word(i, j, 1):
+                    return True
+        
         return False
-                
+            
+
+
+
+        
+        build_word(0, 0, 0)
+        
