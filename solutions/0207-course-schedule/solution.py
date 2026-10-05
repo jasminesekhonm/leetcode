@@ -1,29 +1,29 @@
+from collections import deque
+
 class Solution:
-    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+    def canFinish(self, numCourses: int, prerequisites: list[list[int]]) -> bool:
+        graph = {n: [] for n in range(numCourses)}
+        inDegree = {n: 0 for n in range(numCourses)}
+        for (a, b) in prerequisites:
+            graph[a].append(b)
+            inDegree[b] += 1
+
         
-        courseGraph = defaultdict(list)
-        inDegrees = defaultdict(int)
+        q = deque([n for n in range(numCourses) if inDegree[n] == 0])
         
-        for (course, prereq) in prerequisites:
-            courseGraph[prereq].append(course)
-            inDegrees[course] = inDegrees.get(course, 0) + 1
-         
-        q = deque()
-        visited = set()
-        
-        for course in range(numCourses):
-            if course not in inDegrees:
-                q.append(course)
-        
+        taken = 0
         while q:
-            currCourse = q.popleft()
-            visited.add(currCourse)
+            course = q.popleft()
+            taken += 1
+            for ngbr in graph[course]:
+                inDegree[ngbr] -= 1
+                if inDegree[ngbr] == 0:
+                    q.append(ngbr)
             
-            for nextCourse in courseGraph[currCourse]:
-                if not nextCourse in visited:
-                    inDegrees[nextCourse] -= 1
-                    if inDegrees[nextCourse] == 0:
-                        q.append(nextCourse)
-        
-        return len(visited) == numCourses
+        return taken == numCourses
+
+        return False
+
+            
+
 
