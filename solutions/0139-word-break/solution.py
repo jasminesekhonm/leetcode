@@ -1,21 +1,13 @@
-import collections
-
 class Solution:
-    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-        
-        words = set(wordDict)
-        queue = collections.deque([0])
-        seen = set()
+    def wordBreak(self, s: str, wordDict: list[str]) -> bool:
+        maxLen = max([len(w) for w in wordDict])
+        n = len(s)
+        wordSet = set(wordDict)
+        dp = [True] + [False] * n
+        for i in range(1, n+1):
+            for j in range(max(0, i-maxLen), i):
+                if dp[j] and s[j:i] in wordSet:
+                    dp[i] = True
+                    break
+        return dp[n]
 
-        while queue:
-            start = queue.popleft()
-            if start == len(s):
-                return True 
-            for end in range(start + 1, len(s) + 1):
-                if end in seen:
-                    continue 
-                if s[start:end] in words:
-                    queue.append(end)
-                    seen.add(end)
-            
-        return False
