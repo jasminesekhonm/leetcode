@@ -1,6 +1,13 @@
 class Solution:
     def hammingWeight(self, n: int) -> int:
-        a=bin(n)[2:]
-        a=a.replace("0","")
-        return len(a)
         
+        bits = 0
+        mask = 1
+
+        for i in range(32):
+            if (n & mask) != 0:
+                bits += 1
+            mask <<=1
+        
+        return bits
+
