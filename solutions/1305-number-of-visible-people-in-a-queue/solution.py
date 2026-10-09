@@ -3,25 +3,23 @@ class Solution:
         
         n = len(heights)
 
-        res = [0] * n
+        if n == 0:
+            return 0
+        
+        elif n == 1:
+            return [0]
 
         stack = []
-        # [10,6,8,5,11,9]
-        for i, height in enumerate(heights):
+
+        ans = [0] * n 
+
+        for i in range(n):
+            height = heights[i]
             while stack and heights[stack[-1]] < height:
-                res[stack.pop()] += 1
+                ans[stack.pop()] += 1
             if stack:
-                res[stack[-1]] += 1
-            
+                ans[stack[-1]] += 1
             stack.append(i)
         
-        return res
-
-
-
-
-
-            
-            
-
+        return ans
 
