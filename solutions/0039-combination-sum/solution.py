@@ -1,20 +1,25 @@
 class Solution:
     def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
-        combinations = []
-        candidates.sort()
-        candidates = [c for c in candidates if c <= target]
+        
+        candidates.sort() # O(nlogn)
+
+        candidates = [c for c in candidates if c <= target] # O(n)
+        
         if len(candidates) == 0:
             return []
-        
-        def helper(candidates, target, combination):
-            if target == 0:
-                combinations.append(combination)
-                return 
+
+        res = [] # O(n)
+
+        def helper(candidates, curr_sum, curr_comb):
+            if curr_sum == target:
+                res.append(curr_comb)
+
             for i, candidate in enumerate(candidates):
-                if candidate > target:
-                    continue 
-                helper(candidates[i:], target-candidate, combination + [candidate])
+                if (target - curr_sum - candidate) < 0:
+                    break
+                helper(candidates[i:],curr_sum+candidate, curr_comb+[candidate])
+
         
-        helper(candidates, target, [])
-        return combinations 
-        
+        helper(candidates, 0, [])
+
+        return res
