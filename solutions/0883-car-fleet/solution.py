@@ -1,14 +1,18 @@
 class Solution:
     def carFleet(self, target: int, position: list[int], speed: list[int]) -> int:
-        cars = sorted(zip(position, speed), reverse=True)
-
-        n_fleets, slowest = 0, 0 
-
-        for (pos, speed) in cars:
-            time = (target - pos) / speed 
-            if time > slowest:
-                slowest = time
-                n_fleets += 1 
-
-        return n_fleets
         
+        cars = zip(position, speed)
+        cars = sorted(cars, key = lambda x: x[0])
+
+        slowest = None
+        n_fleets = 0
+
+        for i in range(len(cars)-1, -1, -1):
+            pos, speed = cars[i][0], cars[i][1]
+            time = (target - pos) / speed
+            if slowest is None or time > slowest:
+                slowest = time 
+                n_fleets += 1
+        
+        return n_fleets
+            
