@@ -1,33 +1,27 @@
+from collections import defaultdict
+
 class Solution:
     def maxPoints(self, points: list[list[int]]) -> int:
         
         if len(points) == 0:
-            return 0 
-        
-        if len(points) <= 2:
-            return len(points)
+            return 0
 
-        points = sorted(points, key = lambda x: x[0])
-        
-        max_points = 1
-
+        ans = 1
         for i in range(len(points)):
-            slope_dict = {}
-            x1, y1 = points[i][0], points[i][1]
+            x1, y1 = points[i]
+            slope_dict = defaultdict(int)
             for j in range(i+1, len(points)):
-                x2, y2 = points[j][0], points[j][1]
-                if (x2 == x1):
-                    slope_dict['V'] = slope_dict.get('V', 0) + 1
-                elif (y2 == y1):
-                    slope_dict['H'] = slope_dict.get('H', 0) + 1
+                x2, y2 = points[j]
+                if x2 == x1:
+                    slope = "V"
+                elif y2 == y1:
+                    slope = "H"
                 else:
-                    slope = (y2 - y1) / (x2 - x1)
-                    slope_dict[slope] = slope_dict.get(slope, 0) + 1
+                    slope = (y2-y1) / (x2-x1) 
+                slope_dict[slope] += 1
             if len(slope_dict) > 0:
-                max_points = max(max_points, max(slope_dict.values())+1)
-        return max_points
-
-
-                
+                max_slope = max(slope_dict.values()) + 1
+                ans = max(ans, max_slope)
         
-
+        return ans 
+        
