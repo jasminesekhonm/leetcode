@@ -1,73 +1,66 @@
 class TrieNode:
     def __init__(self):
-        self.is_end = False
-        self.w = None 
         self.children = {}
+        self.word = None 
 
 class Trie:
     def __init__(self):
         self.root = TrieNode()
-    def insert(self, word):
-        node = self.root
-        for ch in word:
-            if ch not in node.children:
-                node.children[ch] = TrieNode()
-            node = node.children[ch]
-        node.is_end = True
-        node.w = word 
 
-    def search(self, word):
+    def insert(self, word):
         node = self.root 
-        for ch in word:
-            if ch not in node.children:
-                return False
-            node = node.children
-        return node.is_end 
-    def startsWith(self, prefix):
-        node = self.root 
-        for ch in word:
-            if ch not in node.children:
-                return False
-            node = node.children
-        return True 
+        for char in word:
+            if char not in node.children:
+                node.children[char] = TrieNode()
+            node = node.children[char]
+
+        node.word = word 
+
 
 class Solution:
     def findWords(self, board: list[list[str]], words: list[str]) -> list[str]:
         m, n = len(board), len(board[0])
-        res = set()
+
+        
+        found = set()
+        moves = [(1,0), (0,1), (-1,0), (0,-1)]
+
         trie = Trie()
-        
-        moves = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+        for word in words:
+            trie.insert(word)
 
-        for w in words:
-            trie.insert(w)
+        def is_valid(r,c):
+            return (0 <= r < m) and (0 <= c < n)
 
-        
-        def dfs(r, c, parent_node):
-            ch = board[r][c]
-            if ch not in parent_node.children:
-                return None 
-            node = parent_node.children.get(ch)
-            if node.w:
-                res.add(node.w)
-                node.w = None
-            board[r][c] = "#"   
+        def dfs(r, c, parent):
+            char = board[r][c]
+            node = parent.children.get(char)
+
+            if node.word:
+                found.add(node.word)
+                node.word = None
+            
+            board[r][c] = "#"
             for (dr, dc) in moves:
                 nr, nc = r + dr, c + dc 
-                if 0 <= nr < m and 0 <= nc < n:
+                if not is_valid(nr, nc):
+                    continue 
+                if board[nr][nc] in node.children:
                     dfs(nr, nc, node)
-            board[r][c] = ch
-            if not node.children and not node.w:
-                del parent_node.children[ch]
             
+            board[r][c] = char 
+            if not node.children and not node.word:
+                del parent.children[char]
+            
+            
+        for i in range(m):
+            for j in range(n):
+                char = board[i][j]
+                if char in trie.root.children:
+                    dfs(i, j, trie.root)
+    
 
-        for r in range(m):
-            for c in range(n):
-                dfs(r, c,trie.root)
         
-        return list(res)
-
-
-
-        
+        return list(found)
+    
 
