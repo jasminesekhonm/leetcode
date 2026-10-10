@@ -1,30 +1,37 @@
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
+        
         m, n = len(grid), len(grid[0])
-        moves = [(1, 0), (0, -1), (-1, 0), (0, 1)]
 
-        def dfs(i, j):
+        land = "1"
+        water = "0"
+        tmp = "2"
 
-            q = [(i, j)]
-            
+        directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+
+        def dfs(r, c):
+            grid[r][c] = tmp 
+
+            q = [(r,c)]
+
             while q:
-                curr_row, curr_col = q.pop()
-                grid[curr_row][curr_col] = "0"
+                r, c = q.pop()
+                
+                for (dr, dc) in directions:
+                    nr, nc = r+dr, c+dc
+                    if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] == land:
+                        grid[nr][nc] = tmp 
 
-                for move in moves:
-                    new_row, new_col = curr_row + move[0], curr_col + move[1]
-                    if 0 <= new_row < m and 0 <= new_col < n and grid[new_row][new_col] == "1":
-                        q.append((new_row, new_col))
-                        
+                        q.append((nr, nc))
 
 
-
-        num_islands = 0
+        n_islands = 0
         for i in range(m):
             for j in range(n):
-                if grid[i][j] == "1":
+                if grid[i][j] == land:
                     dfs(i, j)
-                    num_islands += 1 
+                    n_islands += 1
 
-        return num_islands
+        return n_islands
 
+    
