@@ -1,21 +1,14 @@
 class Solution:
     def countSubstrings(self, s: str) -> int:
-
         n = len(s)
-        ans = 0 
-
-        def expand_palindrome(i, j):
-            nonlocal ans
+        def expand(i, j):
+            num_palindromes = 0
             while i >= 0 and j < n and s[i] == s[j]:
-                ans += 1
+                num_palindromes += 1
                 i -= 1
                 j += 1
-            
+            return num_palindromes
         
-        for i in range(n):
-            expand_palindrome(i, i)
-            if i < n-1:
-                expand_palindrome(i, i+1)
-
+        ans = sum([expand(i, i) + expand(i, i+1) for i in range(n)])
         return ans
-        
+
