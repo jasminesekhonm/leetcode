@@ -1,28 +1,23 @@
+from collections import defaultdict
+
 class Solution:
     def topKFrequent(self, nums: list[int], k: int) -> list[int]:
+
+        freq = defaultdict(int)
         n = len(nums)
-        frequency_dict = {}
 
         for num in nums:
-            frequency_dict[num] = frequency_dict.get(num, 0) + 1
-
-        buckets = [[] for _ in range(n+1)]
-
-        for num in frequency_dict:
-            buckets[frequency_dict[num]].append(num)
-
+            freq[num] += 1
+        
+        min_heap = [(-freq[num], num) for num in freq]
+        heapq.heapify(min_heap)
 
         res = []
+        for i in range(k):
+            _, num = heapq.heappop(min_heap)
+            res.append(num)
 
-        for i in range(n, 0, -1):
-
-            bucket = buckets[i]
-            if len(bucket) > 0:
-                res = res + bucket
-                if len(res) == k:
-                    return res
-        return res     
+        return res
 
 
-        
         
