@@ -3,27 +3,30 @@ from collections import defaultdict
 class Solution:
     def validTree(self, n: int, edges: list[list[int]]) -> bool:
         
-        graph_dict = defaultdict(list)
+        graph = defaultdict(list)
 
-        for (a, b) in edges:
-            graph_dict[a].append(b)
-            graph_dict[b].append(a)
+        for (node1, node2) in edges:
+            graph[node1].append(node2)
+            graph[node2].append(node1)
 
 
-        visited = [0] * n 
+        q = [(0, -1)]
+        
+        visited = [False] * n
 
-        def dfs(i, parent):
+        while q:
+            i, parent = q.pop()
             if visited[i]:
                 return False
             visited[i] = True
-        
-            for ngbr in graph_dict[i]:
+
+            
+            for ngbr in graph[i]:
                 if ngbr == parent:
                     continue 
-                if not dfs(ngbr, i):
-                    return False
-            
-            return True 
-        
+                q.append((ngbr, i))
 
-        return dfs(0, -1) and all(visited)
+        
+        return all(visited)
+
+
