@@ -6,13 +6,18 @@
 class Solution:
     def reverseList(self, head: ListNode | None) -> ListNode | None:
         
-        prev = None 
-        curr = head 
+        # 1 -> 2 -> 3
 
-        while curr:
-            temp = curr.next 
-            curr.next = prev 
-            prev = curr 
-            curr = temp 
+        # prev -> curr -> next
+
+        # prev <- curr <- next
+
+        prev, node = None, head
+
+        while node:
+            tmp = node.next
+            node.next = prev
+            prev, node = node, tmp
 
         return prev
+            
