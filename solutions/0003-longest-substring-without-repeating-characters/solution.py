@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
         
@@ -7,40 +5,30 @@ class Solution:
 
         if n <= 1:
             return n
-        
-        # freq = defaultdict(int)
-        # for char in s:
-        #     freq[char] += 1
-        
-        # if max(freq.values()) == 1:
-        #     return n
-        
-        l = r = 0
+
+        i, j = 0, 0
 
         max_len = 0
-        curr_substring = set()
-        # two pointer approach
-        # start with the smallest string , e.g. a
-        # and keep increasing length until i hit
-        # a duplicate character
 
-        while r < n:
+        char_set = set()
 
-            while r < n and s[r] not in curr_substring:
-                curr_substring.add(s[r])
-                max_len = max(max_len, r - l + 1)
-                r += 1
-            while r < n and s[r] in curr_substring:
-                curr_substring.remove(s[l])
-                l += 1
+        while j < n: 
+            while j < n and s[j] not in char_set:
+                char_set.add(s[j])
+                j += 1
+            max_len = max(max_len, j-i)
+            while j < n and s[j] in char_set:
+                char_set.remove(s[i])
+                i += 1
+        
         
         return max_len
             
 
+            
+                
 
-        # maintain a set of curr string char values
-        # or a freq dict
 
-        # once i hit a duplicate character, increase
-        # start point until freq == 1
 
+
+        
