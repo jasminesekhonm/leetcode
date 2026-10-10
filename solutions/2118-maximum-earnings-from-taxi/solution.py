@@ -2,17 +2,25 @@ from collections import defaultdict
 
 class Solution:
     def maxTaxiEarnings(self, n: int, rides: list[list[int]]) -> int:
+        
+        dp = [0] * (n+1) 
 
-        dp = [0] * (n+1) # maximum number of dollars to reach point n 
-        ending_at = defaultdict(list)
+        earnings = defaultdict(list)
+
         for (start, end, tip) in rides:
-            ending_at[end].append([start, end-start+tip])
+            earning = end - start + tip
+            earnings[end].append((start, earning))
 
-        for i in range(1, n+1):
-            dp[i] = dp[i-1]
-
-            for (start, earning) in ending_at[i]:
-                dp[i] = max(dp[i], earning + dp[start])
+        dp[0] = 0
+        for i in range(1,n+1):
+            max_val = dp[i-1]
+            for (start, earning) in earnings[i]:
+                max_val = max(max_val, dp[start] + earning)
+            
+            dp[i] = max_val
 
         return dp[-1]
-        
+
+
+
+
