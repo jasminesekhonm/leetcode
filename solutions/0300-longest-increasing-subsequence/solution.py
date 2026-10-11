@@ -1,21 +1,20 @@
 class Solution:
     def lengthOfLIS(self, nums: list[int]) -> int:
-
-        ## inserting in a sorted list 
-
-        res = [nums[0]]
-
-        for num in nums[1:]:
-            if num > res[-1]:
-                res.append(num)
-
-            else:
-                i = 0 
-                while num > res[i]:
-                    i += 1
-                res[i] = num 
-            
-        return len(res)
-
-
         
+        n = len(nums)
+
+        if n <= 1:
+            return n
+
+        dp = [0] * n 
+
+        for i in range(n):
+            max_last = 0
+            for j in range(i):
+                if nums[j] < nums[i]:
+                    max_last = max(max_last, dp[j])
+            dp[i] = max_last + 1
+
+        return max(dp)
+
+
