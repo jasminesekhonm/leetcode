@@ -1,19 +1,14 @@
 class Solution:
     def countBits(self, n: int) -> list[int]:
-
-        def pop_count(x):
-            count = 0
-            while x != 0:
-                x &= x-1 
-                count += 1
-            return count
-
-        ans = [0] * (n+1)
-
-        for x in range(n+1):
-            ans[x] = pop_count(x)
-
-        return ans
-
         
+        if n == 0:
+            return [0]
         
+        ans = [0] * (n + 1)
+
+        for x in range(1, n+1):
+            ans[x] = ans[x >> 1] + (x & 1)
+        return ans 
+
+
+
