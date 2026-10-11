@@ -2,22 +2,23 @@ from collections import Counter
 
 class Solution:
     def isPossibleDivide(self, nums: list[int], k: int) -> bool:
-
-        n = len(nums)
-
-        if n % k != 0:
+        
+        if len(nums) % k != 0:
             return False
 
         freq = Counter(nums)
 
-        for num in sorted(freq):
-            count = freq[num]
-            if count == 0:
-                continue 
-            for x in range(num, num+k):
-                if freq[x] < count:
+        for start in sorted(freq):
+
+            c = freq[start]
+            if c == 0:
+                continue
+            for next in range(start,start+k):
+                if freq[next] < c:
                     return False
-                freq[x] -= count
+                freq[next] -= c
 
         return True
+        
+
 
