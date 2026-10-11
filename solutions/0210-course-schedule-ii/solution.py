@@ -1,38 +1,40 @@
+from collections import defaultdict
+
 class Solution:
-    
-    WHITE = 1
-    GRAY = 2
-    BLACK = 3
-    
-    def findOrder(self, numCourses: int, prereqs: List[List[int]]) -> List[int]:
-        
+    def findOrder(self, numCourses: int, prerequisites: list[list[int]]) -> list[int]:
+
         graph = defaultdict(list)
-        indegree = {}
+        in_degrees = {c: 0 for c in range(numCourses)}
+
+        for (a, b) in prerequisites:
+            graph[b].append(a)
+            in_degrees[a] += 1
+
+        q = []
+
+        ans = []
+
+        for course in in_degrees:
+            if in_degrees[course] == 0:
+                q.append(course)
+                ans.append(course)
+                
         
-        for c, pr in prereqs:
-            graph[pr].append(c)
-            indegree[c] = indegree.get(c, 0) + 1
-            
-        zero_indegree_queue = deque([k for k in range(numCourses) if k not in indegree])
+        while q:
+            curr_course = q.pop()
+            for next_course in graph[curr_course]:
+                in_degrees[next_course] -= 1 
+                if in_degrees[next_course] == 0:
+                    q.append(next_course)
+                    ans.append(next_course)
+
+        return ans if len(ans) == numCourses else []
+
         
-        topological_sorted_order = []
         
-        while zero_indegree_queue:
-            
-            vertex = zero_indegree_queue.popleft()
-            topological_sorted_order.append(vertex)
-            
-            if vertex in graph:
-                for neighbor in graph[vertex]:
-                    indegree[neighbor] -= 1
-                    
-                    if indegree[neighbor] == 0:
-                        zero_indegree_queue.append(neighbor)
-                        
-        return topological_sorted_order if len(topological_sorted_order) == numCourses else []
+        # Time Complexity: O(numCourses + len(prerequisites))
+        # Space Complexity: O(numCourses + len(prerequisites))
+
         
-            
-            
-            
-            
-            
+
+        
