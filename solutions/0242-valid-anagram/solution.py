@@ -1,17 +1,14 @@
+from collections import Counter
+
 class Solution:
     def isAnagram(self, s: str, t: str) -> bool:
-        freqDict = {}
-        for char in s:
-            if char not in freqDict:
-                freqDict[char] = 0
-            freqDict[char] += 1
-
+        if len(t) > len(s):
+            s, t = t, s
+        freq = Counter(s)
         for char in t:
-            if char not in freqDict:
+            if char not in freq:
                 return False
-            freqDict[char] -= 1
-            if freqDict[char] < 0:
-                return False
-        
-        return max(freqDict.values()) == 0
+            freq[char] -= 1
+
+        return max(freq.values()) == 0 
         
