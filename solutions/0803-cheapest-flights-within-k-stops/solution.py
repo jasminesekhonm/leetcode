@@ -1,32 +1,27 @@
-from collections import defaultdict
-from queue import Queue
+from collections import defaultdict, deque
 
 class Solution:
-    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
-        adj = defaultdict(list)
-        for flight in flights:
-            adj[flight[0]].append((flight[1], flight[2]))
+    def findCheapestPrice(self, n: int, flights: list[list[int]], src: int, dst: int, k: int) -> int:
+        
+        graph = defaultdict(list)
+        for (a, b, price) in flights:
+            graph[a].append((b, price))
+        
+        q = deque([(src,0, 0)])
 
-        dist = [float('inf')] * n
-        dist[src] = 0
+        min_prices = {}
 
-        q = Queue()
-        q.put((src, 0))
-        stops = 0
+        while q:
+            curr_city, curr_price, stops = q.popleft()
+            if stops == k+1:
+                continue
+            for (next_city, flight_price) in graph[curr_city]:
+                if next_city in min_prices and min_prices[next_city] <= curr_price+flight_price:
+                    continue
+                q.append((next_city, curr_price+flight_price, stops+1))
+                min_prices[next_city] = curr_price+flight_price
+            
+        return min_prices[dst] if dst in min_prices else -1
 
-        while not q.empty() and stops <= k:
-            sz = q.qsize()
-            for _ in range(sz):
-                node, distance = q.get()
 
-                if node not in adj: continue
-
-                for neighbour, price in adj[node]:
-                    if price + distance >= dist[neighbour]: continue
-                    dist[neighbour] = price + distance
-                    q.put((neighbour, dist[neighbour]))
-
-            stops += 1
-
-        return dist[dst] if dist[dst] != float('inf') else -1
 
