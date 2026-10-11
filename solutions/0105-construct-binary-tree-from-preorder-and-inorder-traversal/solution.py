@@ -7,23 +7,23 @@
 class Solution:
     def buildTree(self, preorder: list[int], inorder: list[int]) -> TreeNode | None:
 
+        def build_tree(preorder, inorder):
+            if len(inorder) == 0:
+                return 
+            
+            split_index = inorder.index(preorder.popleft())
+            node = TreeNode(inorder[split_index])
+
+            left_tree = inorder[:split_index]
+            right_tree = inorder[split_index+1:]
+            node.left = build_tree(preorder,left_tree)
+            node.right = build_tree(preorder, right_tree)
+
+            return node
+
         preorder = deque(preorder)
-
-        def helper(preorder, inorder):
-            if not inorder:
-                return None
-            idx = inorder.index(preorder.popleft())
-
-            root = TreeNode(inorder[idx])
-
-            root.left = helper(preorder, inorder[:idx])
-            root.right = helper(preorder, inorder[idx+1:])
-
-            return root 
+        return build_tree(preorder, inorder)
 
 
-
-        return helper(preorder, inorder)
-
-        
+            
         
