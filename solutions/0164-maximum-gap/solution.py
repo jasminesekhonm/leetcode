@@ -1,43 +1,35 @@
 class Solution:
     def maximumGap(self, nums: list[int]) -> int:
-
         n = len(nums)
-        if n < 2:
+
+        min_num = min(nums)
+        max_num = max(nums)
+
+        if min_num == max_num:
             return 0 
 
-        max_num = min_num = nums[0]
+        gap = (max_num - min_num) // n + 1
 
-        for num in nums[1:]:
-            max_num = max(max_num, num)
-            min_num = min(min_num, num)
+        n_buckets = (max_num - min_num) // gap + 1
 
-        
-        gap = max(1, (max_num - min_num) // (n - 1)) ## assume evenly spaced 
-
-        n_buckets = (max_num - min_num) // gap + 1 
-
-        buckets = [[None, None] for _ in range(n_buckets)]
+        buckets = [(None, None) for _ in range(n_buckets)]
 
         for num in nums:
-            index = (num - min_num) // gap 
-
-            if buckets[index][0] is None:
-                buckets[index][0] = buckets[index][1] = num 
+            bucket_index = (num - min_num) // gap 
             
+            min_bucket, max_bucket = buckets[bucket_index]
+            if min_bucket is None:
+                min_bucket = max_bucket = num 
             else:
-                buckets[index][0] = min(buckets[index][0], num)
-                buckets[index][1] = max(buckets[index][1], num)
-
-        prev_max = min_num 
-        max_diff = 0 
-        for i in range(n_buckets):
-            if buckets[i][0] is None:
-                continue  
-            diff = buckets[i][0] - prev_max 
-            max_diff = max(diff, max_diff)
-
-            prev_max = buckets[i][1]
-
-        return max_diff
-
+                min_bucket = min(min_bucket, num)
+                max_bucket = max(max_bucket, num)
+            buckets[bucket_index] = (min_bucket, max_bucket)
         
+        best_gap = 0
+        prev_max = min_num
+        for (new_min, new_max) in buckets:
+            if not new_min is None:
+                best_gap = max(best_gap, new_min - prev_max)
+                prev_max = new_max 
+
+        return best_gap
