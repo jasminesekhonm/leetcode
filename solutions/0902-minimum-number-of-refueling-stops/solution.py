@@ -1,30 +1,28 @@
 class Solution:
     def minRefuelStops(self, target: int, startFuel: int, stations: list[list[int]]) -> int:
+        
+        stations.append((target,float('inf')))
 
-        stations.append([target, 0])
+        curr_fuel = startFuel
+        curr_pos = 0
 
-        curr_fuel = startFuel 
+        skipped = []
 
         n_stops = 0
-        prev_pos = 0
-
-        stations_missed = []
 
         for (pos, fuel) in stations:
-            dist = pos - prev_pos
-            remaining_fuel = curr_fuel - dist 
+            dist = pos - curr_pos
+            rem_fuel = curr_fuel - dist 
+            while skipped and rem_fuel < 0:
+                rem_fuel -= heapq.heappop(skipped)
+                n_stops += 1
+            if rem_fuel < 0:
+                return -1
+            curr_fuel = rem_fuel 
+            curr_pos = pos 
+            heapq.heappush(skipped, -fuel)
 
-            if remaining_fuel < 0:
-                while stations_missed and remaining_fuel < 0:
-                    remaining_fuel += -heapq.heappop(stations_missed) 
-                    n_stops += 1
-                
-                if remaining_fuel < 0:
-                    return -1 
+        return n_stops 
 
-            curr_fuel = remaining_fuel 
-            prev_pos = pos
-            heapq.heappush(stations_missed, -fuel)
 
-        return n_stops
-        
+
