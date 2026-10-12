@@ -1,41 +1,37 @@
-import heapq
-
 class Solution:
     def minimumEffortPath(self, heights: list[list[int]]) -> int:
-
+        
         m, n = len(heights), len(heights[0])
 
-        moves = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+        start = (0, 0)
+        end = (m-1, n-1)
 
-        def effort(r, c, nr, nc):
-            return abs(heights[nr][nc] - heights[r][c])
+        moves = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 
         def is_valid(r, c):
             return (0 <= r < m and 0 <= c < n)
 
-        min_heap = [(0, 0, 0)] # effort, row, col
+        
+        heap = [(0, 0, 0)]
 
-        costs = {(r,c): float('inf') for c in range(n) for r in range(m)}
+        min_costs = {(0,0): 0}
 
-        costs[(0, 0)] = 0
-
-        while min_heap:
-            curr_effort, r, c = heapq.heappop(min_heap)
-            if curr_effort > costs[(r,c)]:
-                continue 
-            if (r, c) == (m-1, n-1):
-                return curr_effort
-
+        while heap:
+            cost, r, c = heapq.heappop(heap)
+            if (r, c) == end:
+                return cost
 
             for (dr, dc) in moves:
-                nr, nc = r+dr, c+dc
-                if is_valid(nr, nc):
-                    new_cost = max(curr_effort, effort(r, c, nr, nc))
-                    if new_cost < costs[(nr, nc)]:
-                        costs[(nr, nc)] = new_cost
-                        heapq.heappush(min_heap, (costs[(nr, nc)], nr, nc))
+                nr, nc = r + dr, c + dc
+                if not is_valid(nr, nc):
+                    continue
+                edge_cost = abs(heights[nr][nc] - heights[r][c])
+                route_cost = max(cost, edge_cost)
+                if route_cost < min_costs.get((nr, nc), float('inf')):
+                    min_costs[(nr,nc)] = route_cost
+                    heapq.heappush(heap, (route_cost, nr, nc))
 
-    
-       
+        return -1
+                
 
 
