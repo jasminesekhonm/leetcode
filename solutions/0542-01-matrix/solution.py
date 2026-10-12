@@ -1,26 +1,33 @@
 class Solution:
-    def updateMatrix(self, mat: List[List[int]]) -> List[List[int]]:
-        
-        
+    def updateMatrix(self, mat: list[list[int]]) -> list[list[int]]:
         m, n = len(mat), len(mat[0])
+
+        def is_valid(r, c):
+            return 0 <= r < m and 0 <= c < n
+
+        moves = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+
+        q = deque([])
+        visited = set()
+
+        for i in range(m):
+            for j in range(n):
+                if mat[i][j] == 0:
+                    q.append((i, j, 0))
+                    visited.add((i, j))
+
+        while q:
+            r, c, dist = q.popleft()
+            for (dr, dc) in moves:
+                nr, nc = r+dr, c+dc
+                if not is_valid(nr, nc) or (nr, nc) in visited:
+                    continue
+                mat[nr][nc] = dist + 1
+                q.append((nr, nc, dist+1))
+                visited.add((nr, nc))
         
-        dp = [[float('inf') for _ in range(n)] for _ in range(m)]
-        
-        for row in range(m):
-            for col in range(n):
-                if mat[row][col] == 0:
-                    dp[row][col] = 0
-                elif mat[row][col] == 1:
-                    if row > 0:
-                        dp[row][col] = min(dp[row][col], dp[row - 1][col] + 1)
-                    if col > 0:
-                        dp[row][col] = min(dp[row][col], dp[row][col - 1] + 1)
-                        
-        for row in range(m - 1, -1, -1):
-            for col in range(n - 1, -1, -1):
-                if row < m - 1:
-                    dp[row][col] = min(dp[row][col], dp[row + 1][col] + 1)
-                if col < n - 1:
-                    dp[row][col] = min(dp[row][col], dp[row][col + 1] + 1)
-        
-        return dp
+
+        return mat
+
+
+                
