@@ -2,25 +2,27 @@ from collections import deque
 
 class Solution:
     def alienOrder(self, words: list[str]) -> str:
-
-        in_degrees = {c: 0 for word in words for c in word}
+        
         graph = {c: [] for word in words for c in word}
+        in_degrees = {c: 0 for word in words for c in word}
 
         for i in range(len(words)-1):
-            w1 = words[i]
-            w2 = words[i+1]
-            if len(w1) > len(w2) and w1.startswith(w2):
+            word1 = words[i]
+            word2 = words[i+1]
+
+            if len(word1) > len(word2) and word1.startswith(word2):
                 return ""
-            for j in range(0, min(len(w1), len(w2))):
-                parent, child = w1[j], w2[j]
+            
+            for j in range(min(len(word1), len(word2))):
+                parent, child = word1[j], word2[j]
                 if parent != child:
                     in_degrees[child] += 1
                     graph[parent].append(child)
                     break
-                
 
         
-        q = deque([char for char in in_degrees if in_degrees[char] == 0])
+        q = deque([c for c in in_degrees if in_degrees[c] == 0])
+
         res = []
         while q:
             curr_char = q.popleft()
@@ -30,11 +32,8 @@ class Solution:
                 in_degrees[child] -= 1
                 if in_degrees[child] == 0:
                     q.append(child)
-            
         
-        if len(res) != len(in_degrees):
-            return ""
+        return "" if len(res) != len(in_degrees) else "".join(res)
 
-        return "".join(res)
+# O(V+E)
 
-        
