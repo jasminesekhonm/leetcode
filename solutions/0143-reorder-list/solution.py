@@ -9,38 +9,34 @@ class Solution:
         Do not return anything, modify head in-place instead.
         """
         
-        if not head or not head.next:
-            return 
-
-        slow, fast = head, head
-
+        slow = fast = head
         while fast.next and fast.next.next:
-            slow = slow.next 
-            fast = fast.next.next 
+            slow = slow.next
+            fast = fast.next.next
 
-        
         # reached halfway
 
-        curr = slow.next 
-        slow.next = None 
-
-        prev = None 
+        curr = slow.next
+        slow.next = None
+        prev = None
 
         while curr:
             tmp = curr.next
-            curr.next = prev 
-            prev = curr 
-            curr = tmp
+            curr.next = prev
+            prev = curr
+            curr = tmp 
 
-        
-        head1, head2 = head, prev 
+        head1, head2 = head, prev
 
         while head2:
-            next1, next2 = head1.next, head2.next 
-
-            head1.next = head2 
+            next1, next2 = head1.next, head2.next
+            head1.next = head2
             head2.next = next1
+            head1, head2 = next1, next2
+        
 
-            head1, head2 = next1, next2 
 
-     
+
+
+
+
